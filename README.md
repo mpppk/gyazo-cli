@@ -1,6 +1,6 @@
 # gyazo-cli
 
-Gyazo API を操作する CLI ツール。[Bun](https://bun.sh) で動作します。
+Gyazo API を操作する CLI ツール。[Bun](https://bun.sh) で動作します。  
 Note: このリポジトリのコードは100%AIが生成しており、内容はほとんど精査していません。利用する際は自己責任でお願いします。
 
 ## 必要条件
