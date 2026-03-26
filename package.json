@@ -1,0 +1,17 @@
+{
+	"name": "gyazo-cli",
+	"version": "0.1.0",
+	"description": "A CLI tool for Gyazo API",
+	"type": "module",
+	"bin": {
+		"gyazo": "./src/index.ts"
+	},
+	"scripts": {
+		"start": "bun run src/index.ts",
+		"typecheck": "bun tsc --noEmit"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"typescript": "^5.0.0"
+	}
+}
