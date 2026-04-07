@@ -1,96 +1,111 @@
 ---
 name: gyazo-cli
-description: "Use when: working with Gyazo images from the command line — uploading screenshots or image files to Gyazo, listing saved images, fetching OCR text extracted from images, or searching image history. Also use when the user mentions a gyazo.com URL and wants to extract text or get metadata from it. Requires GYAZO_ACCESS_TOKEN environment variable. Uses the gyazo-cli tool built with Bun."
+description: "次のときに使う: コマンドラインで Gyazo 画像を扱うとき。スクリーンショットや画像ファイルを Gyazo にアップロードしたい、保存済み画像を一覧したい、画像から抽出された OCR テキストを取得したい、画像履歴を検索したい場合に使う。ユーザーが gyazo.com の URL を示して、その画像からテキスト抽出やメタデータ取得をしたい場合にも使う。`GYAZO_ACCESS_TOKEN` 環境変数が必要。Bun で作られた `gyazo-cli` ツールを使う。"
 ---
 
 # Gyazo CLI
 
-A CLI tool for the Gyazo API. Source: https://github.com/mpppk/gyazo-cli
+Gyazo API を扱うための CLI ツール。ソース: https://github.com/mpppk/gyazo-cli
 
-## Running
+## 実行方法
 
-No installation needed — use `bunx`:
+インストール不要で `bunx` から実行できます:
 
 ```bash
 bunx github:mpppk/gyazo-cli <command> [options]
 ```
 
-Or install globally once:
+または一度だけグローバルインストールします:
 
 ```bash
 bun install -g github:mpppk/gyazo-cli
 gyazo <command> [options]
 ```
 
-## Prerequisites
+## 事前準備
 
 ```bash
 export GYAZO_ACCESS_TOKEN=your_token_here
 ```
 
-Get a token from https://gyazo.com/oauth/applications.
+トークンは https://gyazo.com/oauth/applications で取得します。
 
-## Commands
+## コマンド
 
-### List images
+### 画像一覧
 ```bash
 bunx github:mpppk/gyazo-cli list [--page <n>] [--per-page <n>] [--json]
 ```
-- Default: page 1, 20 results per page (max 100)
+- デフォルトは 1 ページ目、1 ページあたり 20 件です（最大 100 件）
 
-### Get image details
+### 画像詳細を取得
 ```bash
 bunx github:mpppk/gyazo-cli get <image_id> [--ocr] [--json]
 ```
-- `--ocr` — Print only the OCR text (useful for piping or scripting)
-- `--json` — Full JSON including metadata and OCR
+- `--ocr` - OCR テキストだけを出力します。パイプやスクリプトで使うときに便利です
+- `--json` - メタデータと OCR を含む完全な JSON を出力します
 
-### Upload an image
+### 画像をアップロード
 ```bash
 bunx github:mpppk/gyazo-cli upload <file> [--access-policy anyone|only_me] [--title <str>] [--desc <str>] [--collection-id <str>] [--json]
 ```
-- Prints `permalink_url` on success
+- 成功すると `permalink_url` を出力します
 
-### Search images (Gyazo Pro only)
+### 画像を検索（Gyazo Pro のみ）
 ```bash
 bunx github:mpppk/gyazo-cli search <query> [--page <n>] [--per <n>] [--json]
 ```
 
-## Image ID
+## 画像 ID
 
-The image ID is the hex string in a Gyazo URL:
+画像 ID は Gyazo URL に含まれる 16 進文字列です:
 ```
 https://gyazo.com/13fabb407b137e3ef76d46fa087941c2
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                   image_id
 ```
 
-## Key Notes
+## 補足
 
-- OCR data lives at `metadata.ocr` — `--ocr` flag handles this automatically
-- All commands accept `--json` for machine-readable output
-- `search` requires a Gyazo Pro account
+- OCR データは `metadata.ocr` に入っています。`--ocr` フラグを使うと自動でそれを扱います
+- すべてのコマンドで `--json` を使うと機械処理しやすい形式で出力できます
+- `search` の利用には Gyazo Pro アカウントが必要です
 
-## Common Workflows
+## よくある使い方
 
-### Extract OCR text from a Gyazo URL
+### Gyazo URL から OCR テキストを取り出す
 ```bash
 bunx github:mpppk/gyazo-cli get <image_id> --ocr
 ```
 
-### Upload and get a shareable link
+### アップロードして共有リンクを取得する
 ```bash
 bunx github:mpppk/gyazo-cli upload screenshot.png
-# → permalink : https://gyazo.com/...
+# → permalink: https://gyazo.com/...
 ```
 
-### Pipe OCR text into another command
+### Markdown に画像を埋め込む（Gyazo Teams）
+Gyazo Teams を使っている場合は、次の形式で画像の直リンクを作れます:
+
+```text
+https://t.gyazo.com/teams/[team-name]/[image-id].png
+```
+
+Markdown では、画像の直リンクを `img` 部分に、Gyazo の画像ページ URL をリンク先に指定します:
+
+```md
+[![Image from Gyazo](https://t.gyazo.com/teams/[team-name]/[image-id].png)](https://[team-name].gyazo.com/[image-id])
+```
+
+これで Markdown 上で画像がレンダリングされ、クリックすると Gyazo の画像ページを開けます。
+
+### OCR テキストを別のコマンドに渡す
 ```bash
-bunx github:mpppk/gyazo-cli get <image_id> --ocr | pbcopy   # copy to clipboard
+bunx github:mpppk/gyazo-cli get <image_id> --ocr | pbcopy   # クリップボードにコピー
 bunx github:mpppk/gyazo-cli get <image_id> --ocr | grep "keyword"
 ```
 
-### Browse recent captures as JSON
+### 最近のキャプチャを JSON で見る
 ```bash
 bunx github:mpppk/gyazo-cli list --per-page 50 --json | jq '.[].permalink_url'
 ```
