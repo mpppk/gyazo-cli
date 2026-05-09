@@ -1,5 +1,5 @@
 #!/usr/bin/env bun
-import { parseArgs } from "util";
+import { parseArgs } from "node:util";
 import { GyazoAPIError } from "./api.ts";
 import { runGet } from "./commands/get.ts";
 import { runList } from "./commands/list.ts";

@@ -8,9 +8,12 @@
 	},
 	"scripts": {
 		"start": "bun run src/index.ts",
-		"typecheck": "bun tsc --noEmit"
+		"typecheck": "bun tsc --noEmit",
+		"lint": "bunx biome lint src/",
+		"format:check": "bunx biome format src/"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.4.14",
 		"@types/bun": "latest",
 		"typescript": "^5.0.0"
 	}

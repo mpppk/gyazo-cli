@@ -82,7 +82,7 @@ export class GyazoClient {
 	private readonly uploadBase = "https://upload.gyazo.com";
 
 	constructor(token?: string) {
-		const resolved = token ?? process.env["GYAZO_ACCESS_TOKEN"];
+		const resolved = token ?? process.env.GYAZO_ACCESS_TOKEN;
 		if (!resolved) {
 			throw new Error(
 				"Access token is required. Set GYAZO_ACCESS_TOKEN environment variable.",
